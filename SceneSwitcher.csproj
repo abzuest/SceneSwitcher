@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>SceneSwitcher</AssemblyName>
+    <RootNamespace>SceneSwitcher</RootNamespace>
+    <Version>0.1.0</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <!-- Required by the assembly publicizer (accessing non-public game members). -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!-- Game install. Only READ from here: assemblies are referenced, never copied back. -->
+    <GameDir Condition="'$(GameDir)' == ''">E:\Program Files (x86)\Steam\steamapps\common\REPO</GameDir>
+    <ManagedDir>$(GameDir)\REPO_Data\Managed</ManagedDir>
+    <BepInExCoreDir>$(GameDir)\BepInEx\core</BepInExCoreDir>
+    <!-- Dependency mods downloaded into the working folder. -->
+    <ModsDir>$(MSBuildThisFileDirectory)..</ModsDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The unit test project lives under this folder but builds separately. -->
+    <Compile Remove="tests/**" />
+    <None Remove="tests/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- Private=false: never copy referenced DLLs into our output. -->
+  <ItemDefinitionGroup>
+    <Reference>
+      <Private>false</Private>
+    </Reference>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <!-- BepInEx 5 + HarmonyX -->
+    <Reference Include="BepInEx" HintPath="$(BepInExCoreDir)\BepInEx.dll" />
+    <Reference Include="0Harmony" HintPath="$(BepInExCoreDir)\0Harmony.dll" />
+
+    <!-- Game -->
+    <!-- Publicize: compile against a copy (in obj/) with internal members made public. -->
+    <Reference Include="Assembly-CSharp" HintPath="$(ManagedDir)\Assembly-CSharp.dll" Publicize="true" />
+    <Reference Include="UnityEngine" HintPath="$(ManagedDir)\UnityEngine.dll" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(ManagedDir)\UnityEngine.CoreModule.dll" />
+    <Reference Include="PhotonUnityNetworking" HintPath="$(ManagedDir)\PhotonUnityNetworking.dll" />
+    <Reference Include="PhotonRealtime" HintPath="$(ManagedDir)\PhotonRealtime.dll" />
+
+    <!-- Soft dependencies (UI layer, added in a later step) -->
+    <!--
+    <Reference Include="REPOLib" HintPath="$(ModsDir)\Zehs-REPOLib\REPOLib.dll" />
+    <Reference Include="MenuLib" HintPath="$(ModsDir)\REPOModding-MenuLib\MenuLib.dll" />
+    -->
+  </ItemGroup>
+
+  <!-- After each build, stage only the plugin DLL in dist/SceneSwitcher/,
+       ready to be copied as-is into BepInEx/plugins/. -->
+  <Target Name="StageDist" AfterTargets="Build">
+    <RemoveDir Directories="$(MSBuildThisFileDirectory)dist" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildThisFileDirectory)dist\$(AssemblyName)" />
+  </Target>
+
+</Project>
