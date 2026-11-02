@@ -61,3 +61,7 @@ Do not copy the whole project folder: BepInEx would find two DLLs (`bin/` and `o
 
 - [docs/LEVEL_FLOW.md](docs/LEVEL_FLOW.md) - how the game changes levels (decompilation notes)
 - [docs/TEST_PLAN.md](docs/TEST_PLAN.md) - manual in-game test cases
+
+## License
+
+[MIT](LICENSE)
