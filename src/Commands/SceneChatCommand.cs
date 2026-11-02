@@ -16,6 +16,9 @@ namespace SceneSwitcher.Commands
     {
         private const string CommandName = "scene";
 
+        // Easter egg line, intentionally in Spanish.
+        private const string CrimsonLine = "guatona culia fea";
+
         [HarmonyPostfix]
         private static void Postfix(DebugCommandHandler __instance)
         {
@@ -24,17 +27,25 @@ namespace SceneSwitcher.Commands
             {
                 return;
             }
-            __instance.Register(new DebugCommandHandler.ChatCommand(
-                CommandName,
-                "Host only. Switch scene: " + SceneCommandParser.Usage,
-                Execute,
-                Suggest,
-                isEnabled: null,
-                debugOnly: false));
-            Plugin.Log.LogInfo($"Registered chat command /{CommandName}.");
+            CrashReporter.Guard("command registration", () =>
+            {
+                __instance.Register(new DebugCommandHandler.ChatCommand(
+                    CommandName,
+                    "Host only. Switch scene: " + SceneCommandParser.Usage,
+                    Execute,
+                    Suggest,
+                    isEnabled: null,
+                    debugOnly: false));
+                Plugin.Log.LogInfo($"Registered chat command /{CommandName}.");
+            });
         }
 
         private static void Execute(bool isDebugConsole, string[] args)
+        {
+            CrashReporter.Guard("/scene " + string.Join(" ", args), () => ExecuteRequest(args));
+        }
+
+        private static void ExecuteRequest(string[] args)
         {
             SceneRequest request = SceneCommandParser.Parse(args);
             if (request.Error != null)
@@ -50,6 +61,13 @@ namespace SceneSwitcher.Commands
                     return;
                 case SceneAction.List:
                     ListLevels();
+                    return;
+                case SceneAction.Crimson:
+                    // Easter egg (any player): the local player says it out loud, like a chat message.
+                    if (PlayerAvatar.instance)
+                    {
+                        PlayerAvatar.instance.ChatMessageSend(CrimsonLine);
+                    }
                     return;
             }
 

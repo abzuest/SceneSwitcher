@@ -25,6 +25,23 @@ namespace SceneSwitcher.Tests
             Assert.Equal(expected, request.Action);
         }
 
+        [Theory]
+        [InlineData("crimson")]
+        [InlineData("CRIMSON")]
+        public void Crimson_easter_egg(string input)
+        {
+            SceneRequest request = Parse(input);
+
+            Assert.Null(request.Error);
+            Assert.Equal(SceneAction.Crimson, request.Action);
+        }
+
+        [Fact]
+        public void Crimson_is_not_advertised_in_usage()
+        {
+            Assert.DoesNotContain("crimson", SceneCommandParser.Usage, System.StringComparison.OrdinalIgnoreCase);
+        }
+
         [Fact]
         public void Unknown_option_is_an_error()
         {

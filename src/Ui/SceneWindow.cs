@@ -45,6 +45,21 @@ namespace SceneSwitcher.Ui
 
         private void Update()
         {
+            if (!CrashReporter.Guard("window", UpdateWindow))
+            {
+                Shutdown();
+            }
+        }
+
+        /// <summary>After a crash, close and disable the window so the error is not repeated every frame.</summary>
+        private void Shutdown()
+        {
+            Close();
+            enabled = false;
+        }
+
+        private void UpdateWindow()
+        {
             Keyboard keyboard = Keyboard.current;
             if (keyboard == null)
             {
@@ -128,6 +143,20 @@ namespace SceneSwitcher.Ui
         // only the code inside a pressed button's "if" has side effects.
         private void DrawWindow(int windowId)
         {
+            try
+            {
+                DrawWindowContents();
+            }
+            catch (Exception exception) when (!(exception is ExitGUIException))
+            {
+                // ExitGUIException is IMGUI's normal control flow and must propagate.
+                CrashReporter.Report(exception, "window GUI");
+                Shutdown();
+            }
+        }
+
+        private void DrawWindowContents()
+        {
             GUILayout.Label(_level == 0 ? "Level: keep current" : $"Level: {_level}");
             _level = Mathf.RoundToInt(GUILayout.HorizontalSlider(_level, 0f, MaxLevel));
             GUILayout.Space(6f);
@@ -197,7 +226,7 @@ namespace SceneSwitcher.Ui
         private void Run(Action action)
         {
             Close();
-            action();
+            CrashReporter.Guard("window button", action);
         }
     }
 }

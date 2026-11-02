@@ -18,9 +18,10 @@ While it is open the cursor is free and player controls are blocked. Other playe
 | Section | Key | Default | Description |
 |---|---|---|---|
 | `Window` | `ToggleKey` | `Insert` | Key that opens/closes the window. Any [Input System key name](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/api/UnityEngine.InputSystem.Key.html); `None` disables the window. |
+| `Saves` | `ProgressOnSceneChange` | `RevertToLastSave` | In saved (private) lobbies: `RevertToLastSave` goes back to the last save before switching (like the vanilla `level` debug command); `KeepCurrent` keeps money, upgrades and level as they are. Going from a map to a shop always keeps progress. |
 
-With [REPOConfig](https://thunderstore.io/c/repo/p/REPOModding/REPOConfig/) installed, SceneSwitcher
-appears in its "Mods" list and the key can be changed in game; the change applies immediately.
+All settings are read when used. With [REPOConfig](https://thunderstore.io/c/repo/p/REPOModding/REPOConfig/)
+installed, SceneSwitcher appears in its "Mods" list and changes made in game apply immediately.
 
 ## Chat command
 
@@ -43,10 +44,10 @@ If a map name itself ends in a number (e.g. a modded "Facility 2"), the exact na
 over reading the number as a level.
 
 Notes:
-- Like the vanilla `level` debug command, in saved (private) lobbies a scene change reverts
-  run progress to the last save before switching. Exception: going from a map to a shop
-  keeps the run's progress, as the vanilla `level shop` command does.
-- Arenas follow their normal rules: when an arena ends, the game returns to the lobby menu.
+- What happens to the run's progress is set by `ProgressOnSceneChange` (see Configuration).
+- Arenas are the Game Over screen and follow vanilla rules: in saved (private) lobbies,
+  **entering an arena deletes the save file**, even if you leave it right away. When an arena
+  ends, the game returns to the lobby menu.
 
 ## Build
 
@@ -69,7 +70,6 @@ dotnet test tests/SceneSwitcher.Tests
 ```
 
 Unit tests cover command parsing and level name matching (no game needed).
-In-game checks are listed in [docs/TEST_PLAN.md](docs/TEST_PLAN.md).
 
 ## Install (manual)
 
@@ -79,7 +79,6 @@ Do not copy the whole project folder: BepInEx would find two DLLs (`bin/` and `o
 ## Docs
 
 - [docs/LEVEL_FLOW.md](docs/LEVEL_FLOW.md) - how the game changes levels (decompilation notes)
-- [docs/TEST_PLAN.md](docs/TEST_PLAN.md) - manual in-game test cases
 
 ## License
 

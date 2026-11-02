@@ -4,3 +4,4 @@ dist/
 .vs/
 *.user
 TestResults/
+docs/TEST_PLAN.md

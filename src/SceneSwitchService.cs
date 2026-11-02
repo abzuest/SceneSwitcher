@@ -55,7 +55,10 @@ namespace SceneSwitcher
         public static void ReturnToLobbyMenu()
         {
             RunManager rm = RunManager.instance;
-            ResetLevelProgress();
+            if (Settings.Progress.Value == ProgressMode.RevertToLastSave)
+            {
+                ResetLevelProgress();
+            }
             if (!SemiFunc.RunIsLobbyMenu())
             {
                 rm.loadLevel = rm.saveLevel;
@@ -73,9 +76,10 @@ namespace SceneSwitcher
         public static void LaunchLevel(Level level, int? levelNumber)
         {
             RunManager rm = RunManager.instance;
-            // Like the vanilla "level shop" command: going from a map to a shop keeps the run's
-            // progress (as if the level was completed); every other change reverts to the last save.
-            bool keepProgress = SemiFunc.IsLevelShop(level) && SemiFunc.RunIsLevel();
+            // Like the vanilla "level shop" command: going from a map to a shop always keeps the
+            // run's progress (as if the level was completed); otherwise the setting decides.
+            bool keepProgress = Settings.Progress.Value == ProgressMode.KeepCurrent
+                || (SemiFunc.IsLevelShop(level) && SemiFunc.RunIsLevel());
             if (!keepProgress)
             {
                 ResetLevelProgress();

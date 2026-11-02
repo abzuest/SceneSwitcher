@@ -20,7 +20,11 @@ namespace SceneSwitcher.Patches
                 return;
             }
             _logged = true;
+            CrashReporter.Guard("level catalog", LogCatalog);
+        }
 
+        private static void LogCatalog()
+        {
             RunManager rm = RunManager.instance;
             Plugin.Log.LogInfo($"Current level: {rm.levelCurrent?.name} | levelsCompleted: {rm.levelsCompleted}");
             Plugin.Log.LogInfo($"Lobby: {rm.levelLobby?.name} | Lobby menu: {rm.levelLobbyMenu?.name}");

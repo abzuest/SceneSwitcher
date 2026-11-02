@@ -14,7 +14,8 @@ namespace SceneSwitcher.Core
         Map,
         RandomMap,
         Shop,
-        RandomShop
+        RandomShop,
+        Crimson
     }
 
     public sealed class SceneRequest
@@ -67,6 +68,9 @@ namespace SceneSwitcher.Core
             {
                 case "help":
                     return new SceneRequest { Action = SceneAction.Help };
+                case "crimson":
+                    // Easter egg, intentionally left out of Usage.
+                    return new SceneRequest { Action = SceneAction.Crimson };
                 case "list":
                     return new SceneRequest { Action = SceneAction.List };
                 case "lobby":
