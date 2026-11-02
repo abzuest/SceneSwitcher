@@ -7,7 +7,7 @@ No other mods required.
 ## Window (Insert key)
 
 The host can press **Insert** to open the Scene Switcher window: a level slider (0 = keep current)
-and one button per destination: lobby menu, truck, every shop, every map (including modded ones)
+and one button per destination: lobby menu, truck, every shop, every map
 and both arenas. The level applies to the truck, shops and maps. Escape or Insert closes it.
 While it is open the cursor is free and player controls are blocked. Other players cannot open it.
 
@@ -36,11 +36,11 @@ Type the command in the in-game chat (host only; other players get "Only the hos
 | `/scene map random [level]` | Launch a random map |
 | `/scene arena fight` | Launch the disposal arena (alias: `disposal`) |
 | `/scene arena race` | Launch the race cars arena (aliases: `cars`, `race cars`) |
-| `/scene list` | Show available maps (including modded ones), shops and arenas |
+| `/scene list` | Show available maps, shops and arenas |
 | `/scene` or `/scene help` | Show usage |
 
 Map names are case-insensitive and can be shortened when unique (`/scene map wiz`).
-If a map name itself ends in a number (e.g. a modded "Facility 2"), the exact name wins
+If a map name itself ends in a number (e.g. "Facility 2"), the exact name wins
 over reading the number as a level.
 
 Notes:
