@@ -1,9 +1,28 @@
 # SceneSwitcher
 
 Host-only R.E.P.O. (v0.5.0) mod to switch scenes on demand. BepInEx 5 + HarmonyX.
+
 No other mods required.
 
-## Usage
+## Window (Insert key)
+
+The host can press **Insert** to open the Scene Switcher window: a level slider (0 = keep current)
+and one button per destination: lobby menu, truck, every shop, every map (including modded ones)
+and both arenas. The level applies to the truck, shops and maps. Escape or Insert closes it.
+While it is open the cursor is free and player controls are blocked. Other players cannot open it.
+
+## Configuration
+
+`BepInEx/config/abzu.SceneSwitcher.cfg`:
+
+| Section | Key | Default | Description |
+|---|---|---|---|
+| `Window` | `ToggleKey` | `Insert` | Key that opens/closes the window. Any [Input System key name](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.7/api/UnityEngine.InputSystem.Key.html); `None` disables the window. |
+
+With [REPOConfig](https://thunderstore.io/c/repo/p/REPOModding/REPOConfig/) installed, SceneSwitcher
+appears in its "Mods" list and the key can be changed in game; the change applies immediately.
+
+## Chat command
 
 Type the command in the in-game chat (host only; other players get "Only the host can change scenes."):
 

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>SceneSwitcher</AssemblyName>
     <RootNamespace>SceneSwitcher</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.3.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <!-- Required by the assembly publicizer (accessing non-public game members). -->
@@ -14,8 +14,6 @@
     <GameDir Condition="'$(GameDir)' == ''">E:\Program Files (x86)\Steam\steamapps\common\REPO</GameDir>
     <ManagedDir>$(GameDir)\REPO_Data\Managed</ManagedDir>
     <BepInExCoreDir>$(GameDir)\BepInEx\core</BepInExCoreDir>
-    <!-- Dependency mods downloaded into the working folder. -->
-    <ModsDir>$(MSBuildThisFileDirectory)..</ModsDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -47,12 +45,9 @@
     <Reference Include="UnityEngine.CoreModule" HintPath="$(ManagedDir)\UnityEngine.CoreModule.dll" />
     <Reference Include="PhotonUnityNetworking" HintPath="$(ManagedDir)\PhotonUnityNetworking.dll" />
     <Reference Include="PhotonRealtime" HintPath="$(ManagedDir)\PhotonRealtime.dll" />
-
-    <!-- Soft dependencies (UI layer, added in a later step) -->
-    <!--
-    <Reference Include="REPOLib" HintPath="$(ModsDir)\Zehs-REPOLib\REPOLib.dll" />
-    <Reference Include="MenuLib" HintPath="$(ModsDir)\REPOModding-MenuLib\MenuLib.dll" />
-    -->
+    <Reference Include="Unity.InputSystem" HintPath="$(ManagedDir)\Unity.InputSystem.dll" />
+    <Reference Include="UnityEngine.IMGUIModule" HintPath="$(ManagedDir)\UnityEngine.IMGUIModule.dll" />
+    <Reference Include="UnityEngine.InputLegacyModule" HintPath="$(ManagedDir)\UnityEngine.InputLegacyModule.dll" />
   </ItemGroup>
 
   <!-- After each build, stage only the plugin DLL in dist/SceneSwitcher/,
