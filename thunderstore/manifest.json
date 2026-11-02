@@ -1,0 +1,9 @@
+{
+  "name": "SceneSwitcher",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/abzuest/SceneSwitcher",
+  "description": "Host-only scene switching: jump to the lobby menu, the truck, any shop, any map at a chosen level, or the Game Over arenas. Chat command /scene and an Insert-key window.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2305"
+  ]
+}

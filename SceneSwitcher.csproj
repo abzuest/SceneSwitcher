@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>SceneSwitcher</AssemblyName>
     <RootNamespace>SceneSwitcher</RootNamespace>
-    <Version>0.4.0</Version>
+    <Version>1.0.0</Version>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
     <!-- Required by the assembly publicizer (accessing non-public game members). -->
@@ -55,6 +55,38 @@
   <Target Name="StageDist" AfterTargets="Build">
     <RemoveDir Directories="$(MSBuildThisFileDirectory)dist" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildThisFileDirectory)dist\$(AssemblyName)" />
+  </Target>
+
+  <!-- Thunderstore package: dotnet build -c Release -t:Package
+       Produces dist/abzuest-SceneSwitcher-<Version>.zip with the DLL, manifest, icon, README and CHANGELOG. -->
+  <PropertyGroup>
+    <ThunderstoreDir>$(MSBuildThisFileDirectory)thunderstore</ThunderstoreDir>
+    <PackageStagingDir>$(BaseIntermediateOutputPath)thunderstore</PackageStagingDir>
+    <PackageZip>$(MSBuildThisFileDirectory)dist\abzuest-$(AssemblyName)-$(Version).zip</PackageZip>
+  </PropertyGroup>
+
+  <Target Name="Package" DependsOnTargets="Build">
+    <Error Condition="'$(Configuration)' != 'Release'" Text="Build the package in Release: dotnet build -c Release -t:Package" />
+    <Error Condition="!Exists('$(ThunderstoreDir)\icon.png')" Text="Missing thunderstore/icon.png (256x256 PNG required by Thunderstore)." />
+
+    <!-- Keep the three version numbers in sync: csproj, Plugin.cs and manifest.json. -->
+    <ReadLinesFromFile File="$(ThunderstoreDir)\manifest.json">
+      <Output TaskParameter="Lines" ItemName="ManifestLines" />
+    </ReadLinesFromFile>
+    <ReadLinesFromFile File="$(MSBuildThisFileDirectory)src\Plugin.cs">
+      <Output TaskParameter="Lines" ItemName="PluginLines" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <ManifestText>@(ManifestLines)</ManifestText>
+      <PluginText>@(PluginLines)</PluginText>
+    </PropertyGroup>
+    <Error Condition="!$(ManifestText.Contains('&quot;version_number&quot;: &quot;$(Version)&quot;'))" Text="thunderstore/manifest.json version_number does not match $(Version)." />
+    <Error Condition="!$(PluginText.Contains('PluginVersion = &quot;$(Version)&quot;'))" Text="Plugin.PluginVersion does not match $(Version)." />
+
+    <RemoveDir Directories="$(PackageStagingDir)" />
+    <Copy SourceFiles="$(TargetPath);$(ThunderstoreDir)\manifest.json;$(ThunderstoreDir)\icon.png;$(ThunderstoreDir)\README.md;$(ThunderstoreDir)\CHANGELOG.md" DestinationFolder="$(PackageStagingDir)" />
+    <ZipDirectory SourceDirectory="$(PackageStagingDir)" DestinationFile="$(PackageZip)" Overwrite="true" />
+    <Message Importance="high" Text="Thunderstore package: $(PackageZip)" />
   </Target>
 
 </Project>

@@ -5,3 +5,4 @@ dist/
 *.user
 TestResults/
 docs/TEST_PLAN.md
+*.zip

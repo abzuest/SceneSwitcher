@@ -63,6 +63,17 @@ The game path defaults to `E:\Program Files (x86)\Steam\steamapps\common\REPO`;
 override it with `dotnet build -p:GameDir="<path>"`. The build only reads from the game folder
 (`Assembly-CSharp` is publicized into a copy under `obj/`).
 
+## Thunderstore package
+
+```
+dotnet build -c Release -t:Package
+```
+
+Creates `dist/abzuest-SceneSwitcher-<version>.zip` from the DLL and the files in `thunderstore/`
+(`manifest.json`, `icon.png`, `README.md`, `CHANGELOG.md`). The build fails if the versions in
+`SceneSwitcher.csproj`, `src/Plugin.cs` and `thunderstore/manifest.json` differ, or if the icon
+is missing.
+
 ## Tests
 
 ```
